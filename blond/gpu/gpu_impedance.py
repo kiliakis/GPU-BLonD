@@ -169,18 +169,13 @@ class gpu_InducedVoltage(_InducedVoltage):
             beam_spectrum_dict[self.n_fft] = self.profile.dev_beam_spectrum
         beam_spectrum = beam_spectrum_dict[self.n_fft]
 
-        # with timing.timed_region('serial:indVolt1Turn'):
-        with timing.timed_region('serial:getarray'):
+        with timing.timed_region('serial:indVolt1Turn'):
             inp = get_gpuarray((beam_spectrum.size, bm.precision.complex_t,
                                 id(self), 'inp'))
-        with timing.timed_region('serial:complex_mul'):
             complex_mul(self.dev_total_impedance, beam_spectrum, inp)
-        with timing.timed_region('serial:irfft'):
             my_res = bm.irfft(inp, caller_id=id(self))
-        with timing.timed_region('serial:getarray'):
             self.dev_induced_voltage = get_gpuarray(
                 (self.n_induced_voltage, bm.precision.real_t, id(self), 'iv'))
-        with timing.timed_region('serial:gpu_mul'):
             gpu_mul(self.dev_induced_voltage, my_res,
                     bm.precision.real_t(-self.beam.Particle.charge *
                                         e * self.beam.ratio),

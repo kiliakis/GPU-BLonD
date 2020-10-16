@@ -112,7 +112,7 @@ class gpu_RingAndRFTracker(RingAndRFTracker):
             if self.rf_params.empty is False:
                 
                 if self.interpolation:
-                    with timing.timed_region('comp:LIKick'):
+                    with timing.timed_region('comp:lik-pre'):
                         self.dev_total_voltage = get_gpuarray(
                             (self.dev_rf_voltage.size, bm.precision.real_t, id(self), "dtv"))
                         if self.totalInducedVoltage is not None:
@@ -120,11 +120,11 @@ class gpu_RingAndRFTracker(RingAndRFTracker):
                                        self.totalInducedVoltage.dev_induced_voltage)
                         else:
                             self.dev_total_voltage = self.dev_rf_voltage
-                        bm.linear_interp_kick(dev_voltage=self.dev_total_voltage,
-                                              dev_bin_centers=self.profile.dev_bin_centers,
-                                              charge=self.beam.Particle.charge,
-                                              acceleration_kick=self.acceleration_kick[turn],
-                                              beam=self.beam)
+                    bm.linear_interp_kick(dev_voltage=self.dev_total_voltage,
+                                          dev_bin_centers=self.profile.dev_bin_centers,
+                                          charge=self.beam.Particle.charge,
+                                          acceleration_kick=self.acceleration_kick[turn],
+                                          beam=self.beam)
                         # bm.LIKick_n_drift(dev_voltage=self.dev_total_voltage,
                         #                   dev_bin_centers=self.profile.dev_bin_centers,
                         #                   charge=self.beam.Particle.charge,

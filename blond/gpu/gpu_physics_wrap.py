@@ -11,13 +11,11 @@ from ..gpu.cucache import get_gpuarray
 from ..utils import bmath as bm
 from ..gpu import block_size, grid_size
 from .gpu_butils_wrap import set_zero_int, d_multscalar
-# from .. import libblond as __lib
-# import pycuda.cumath as cm
-# import traceback
-# from pycuda import gpuarray
-# from ..utils.butils_wrap import trapz
-# drv.init()
-
+try:
+    from pyprof import timing
+except ImportError:
+    from ..utils import profile_mock as timing
+    
 my_gpu = bm.gpuDev()
 ker = bm.getMod()
 
@@ -114,34 +112,43 @@ def gpu_linear_interp_kick(dev_voltage,
     macros = beam.dev_dt.size
     slices = dev_bin_centers.size
 
-    dev_voltageKick = get_gpuarray((slices-1, bm.precision.real_t, 0, 'vK'))
-    dev_factor = get_gpuarray((slices-1, bm.precision.real_t, 0, 'dF'))
+    with timing.timed_region('comp:lik-getarray'):
 
-    gm_linear_interp_kick_help(beam.dev_dt,
-                               beam.dev_dE,
-                               dev_voltage,
-                               dev_bin_centers,
-                               bm.precision.real_t(charge),
-                               np.int32(slices),
-                               np.int32(macros),
-                               bm.precision.real_t(acceleration_kick),
-                               dev_voltageKick,
-                               dev_factor,
-                               grid=grid_size, block=block_size,
-                               time_kernel=True)
-    gm_linear_interp_kick_comp(beam.dev_dt,
-                               beam.dev_dE,
-                               dev_voltage,
-                               dev_bin_centers,
-                               bm.precision.real_t(charge),
-                               np.int32(slices),
-                               np.int32(macros),
-                               bm.precision.real_t(acceleration_kick),
-                               dev_voltageKick,
-                               dev_factor,
-                               grid=grid_size, block=block_size,
-                               time_kernel=True)
-    beam.dE_obj.invalidate_cpu()
+        dev_voltageKick = get_gpuarray((slices-1, bm.precision.real_t, 0, 'vK'))
+        dev_factor = get_gpuarray((slices-1, bm.precision.real_t, 0, 'dF'))
+
+    with timing.timed_region('comp:lik_help'):
+
+        gm_linear_interp_kick_help(beam.dev_dt,
+                                   beam.dev_dE,
+                                   dev_voltage,
+                                   dev_bin_centers,
+                                   bm.precision.real_t(charge),
+                                   np.int32(slices),
+                                   np.int32(macros),
+                                   bm.precision.real_t(acceleration_kick),
+                                   dev_voltageKick,
+                                   dev_factor,
+                                   grid=grid_size, block=block_size,
+                                   time_kernel=True)
+
+    with timing.timed_region('comp:lik_comp'):
+
+        gm_linear_interp_kick_comp(beam.dev_dt,
+                                   beam.dev_dE,
+                                   dev_voltage,
+                                   dev_bin_centers,
+                                   bm.precision.real_t(charge),
+                                   np.int32(slices),
+                                   np.int32(macros),
+                                   bm.precision.real_t(acceleration_kick),
+                                   dev_voltageKick,
+                                   dev_factor,
+                                   grid=grid_size, block=block_size,
+                                   time_kernel=True)
+
+    with timing.timed_region('comp:lik_inval'):
+        beam.dE_obj.invalidate_cpu()
 
 
 def gpu_linear_interp_kick_drift(dev_voltage,
