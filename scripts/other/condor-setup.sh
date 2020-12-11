@@ -16,10 +16,7 @@ mpirun --version
 nvcc --version
 nvidia-smi
 
-# if [ -z "$FFTWDIR" ]; then
-# 	python blond/compile.py -p --with-fftw-omp --with-fftw-lib=$FFTWDIR/lib --with-fftw-header=$FFTWDIR/include;
-# else
-# 	python blond/compile.py -p --with-fftw-omp;
-# fi
+INSTALL_DIR=$HOME/install
 
-$@
+python blond/compile.py --with-fftw --with-fftw-threads --with-fftw-lib=$INSTALL_DIR/lib/ --with-fftw-header=$INSTALL_DIR/include/ -p --gpu
+

@@ -62,7 +62,7 @@ gconfig = {
     # 'x_to_keep': [4, 8, 16, 32, 64],
     'omp_name': 'omp',
     'y_name': 'avg_time(sec)',
-    'xlabel': 'Nodes (x20 Cores)',
+    'xlabel': 'Nodes (x20 Cores/ x1 or x2 GPUs)',
     'ylabel': 'Norm. Throughput',
     'title': {
                 # 's': '{}'.format(case.upper()),
@@ -76,7 +76,8 @@ gconfig = {
         'fontsize': 9,
         'textcoords': 'data',
         'va': 'bottom',
-        'ha': 'center'
+        'ha': 'center',
+        'rotation': '0',
     },
     'ticks': {'fontsize': 10},
     'fontsize': 10,
@@ -108,6 +109,7 @@ gconfig = {
         '{}/{}/tp-approx0-weak-scaling/comm-comp-report.csv',
         '{}/{}/approx0-weak-scaling/comm-comp-report.csv',
         '{}/{}/exact-timing-gpu/comm-comp-report.csv',
+        # '{}/{}/exact-timing-gpu-512x160/comm-comp-report.csv',
         '{}/{}/approx0-weak-scaling-gpu-2pn/comm-comp-report.csv',
         # '{}/{}/approx0-weak-scaling-gpu-1pn/comm-comp-report.csv',
         # '{}/{}/approx0-weak-scaling/comm-comp-report.csv',
@@ -182,9 +184,9 @@ if __name__ == '__main__':
 
         plt.title('{}'.format(case.upper()), **gconfig['title'])
         # if col == 1:
-        #     plt.xlabel(gconfig['xlabel'], labelpad=3,
-        #                fontweight='bold',
-        #                fontsize=gconfig['fontsize'])
+        plt.xlabel(gconfig['xlabel'], labelpad=3,
+                   fontweight='bold',
+                   fontsize=gconfig['fontsize'])
         # if col == 0:
         plt.ylabel(gconfig['ylabel'], labelpad=3,
                    fontweight='bold',
@@ -258,13 +260,13 @@ if __name__ == '__main__':
                     edgecolor='0', label=label, hatch=gconfig['hatches'][idx],
                     color=gconfig['colors'][idx])
             
-            if 'TP' in label:
-                for i in np.arange(len(speedup)):
-                    # if speedup[i] > 0.9:
-                    #     continue
-                    ax.annotate('{:.2f}'.format(speedup[i]),
-                                xy=(pos+i, speedup[i]),
-                                rotation='90', **gconfig['annotate'])
+            # if 'CPU-BASE':
+            for i in np.arange(len(speedup)):
+                # if speedup[i] > 0.9:
+                #     continue
+                ax.annotate('{:.2f}'.format(speedup[i]),
+                            xy=(pos+i, speedup[i]),
+                            **gconfig['annotate'])
             # plt.plot(np.arange(len(x)), speedup,
             #          label=label, marker=gconfig['markers'][idx],
             #          color=gconfig['colors'][idx])
