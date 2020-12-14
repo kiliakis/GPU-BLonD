@@ -195,7 +195,7 @@ if (__name__ == "__main__"):
             import pycuda.driver as drv
             drv.init()
             dev = drv.Device(0)
-            print('Device name {}'.format(dev.name))
+            print('Device name {}'.format(dev.name()))
             comp_capability = ('%d%d' % dev.compute_capability())
         elif args.gpu is not None:
             comp_capability = args.gpu
@@ -205,7 +205,7 @@ if (__name__ == "__main__"):
         libname_double = os.path.join(basepath, 'gpu/cuda_kernels/kernels_double.cubin')
         libname_single = os.path.join(basepath, 'gpu/cuda_kernels/kernels_single.cubin')
         # we need to get the header files location
-        output = subprocess.run('pip3 show pycuda | grep Location', shell=True,
+        output = subprocess.run('python3 -m pip show pycuda | grep Location', shell=True,
                                 stdout=subprocess.PIPE,
                                 encoding='utf-8')
         pycudaloc = os.path.join(output.stdout.split(

@@ -4,14 +4,15 @@ slurm:
         
         # CPU only experiments
         # Strong scaling
-        - 'approx0-strong-scaling'
-        - 'tp-approx0-strong-scaling'
+        # - 'approx0-strong-scaling' DONE
+        # - 'tp-approx0-strong-scaling' DONE
         # - 'lb-tp-approx0-strong-scaling'
+        # - 'cpu-baseline'
         
         # Weak Scaling
         # - 'lb-tp-approx0-weak-scaling'
-        - 'approx0-weak-scaling'
-        - 'tp-approx0-weak-scaling'
+        # - 'approx0-weak-scaling' DONE
+        # - 'tp-approx0-weak-scaling' DONE
         # - 'lb-tp-approx0-weak-scaling'
 
         # - 'lb-tp-approx1-weak-scaling'
@@ -35,12 +36,12 @@ slurm:
         # 'approx0-openmpi3-impl'
 
         # GPU only experiments
-        - 'approx0-weak-scaling-gpu-1pn'
-        - 'approx0-weak-scaling-gpu-2pn'
+        # - 'approx0-weak-scaling-gpu-1pn'
+        # - 'approx0-weak-scaling-gpu-2pn' 
         # - 'tp-approx0-weak-scaling-gpu'
 
-        - 'approx0-strong-scaling-gpu-1pn'
-        - 'approx0-strong-scaling-gpu-2pn'
+        # - 'approx0-strong-scaling-gpu-1pn'
+        # - 'approx0-strong-scaling-gpu-2pn'
         # - 'tp-approx0-strong-scaling-gpu'
 
         # - 'lb-tp-approx0-weak-scaling-gpu'
@@ -53,12 +54,27 @@ slurm:
         # - 'lb-approx0-weak-scaling-cpu-gpu'
         
         # Approximate 
-        - 'srp-timing-gpu'
-        - 'rds-timing-gpu'
-        - 'exact-timing-gpu'
-        - 'float32-timing-gpu'
-        - 'f32-srp-timing-gpu'
-        - 'f32-rds-timing-gpu'
+        # - 'srp-timing-cpu' DONE
+        # - 'rds-timing-gpu' DONE
+        # - 'exact-timing-gpu' DONE
+        # - 'float32-timing-gpu' DONE
+        # - 'f32-srp-timing-gpu' DONE
+        # - 'f32-rds-timing-gpu' DONE
+
+        # Approximate Weak Scaling
+        # - 'srp-weak-scaling-timing-gpu' 
+        # - 'rds-weak-scaling-timing-gpu' 
+        # - 'exact-weak-scaling-timing-gpu'  
+        # - 'float32-weak-scaling-timing-gpu'
+        # - 'f32-srp-weak-scaling-timing-gpu'
+        # - 'f32-rds-weak-scaling-timing-gpu' 
+
+        # - 'srp-timing-cpu' # Done 
+        # - 'rds-timing-cpu' # In progress
+        # - 'exact-timing-cpu' # In progress
+        # - 'float32-timing-cpu'
+        # - 'f32-srp-timing-cpu' 
+        # - 'f32-rds-timing-cpu' 
 
         # - f32-rds-monitor
         # - f32-srp-monitor
@@ -261,6 +277,311 @@ slurm:
             'repeats': 2
         },
 
+        # Approximate Weak-Scaling
+        'f32-srp-weak-scaling-timing-gpu': {
+            'exe': ['LHC_main.py'],
+            'particles': [1500000],
+            'bunches': [12, 24, 48, 96, 192],
+            'slices': [1000],
+            'turns': [10000],
+            'monitor': [0],
+            'seed': [0],
+            'mtw': [0],
+            'precision': ['single'],
+            'withtp': [0],
+            'reduce': [2, 2, 2, 2, 2, 3, 3, 3, 3, 3],
+            'approx': [1],
+            'log': [1],
+            'loadbalance': ['reportonly,,,,'],
+            'artificialdelay': ['off'],
+            'timing': ['timing'],
+            'gpu': [1],
+            'workers': [1, 2, 4, 8, 16],
+            'omp': [20],            
+            'mpi': ['openmpi4'],
+            'time': [60],
+            'repeats': 3
+        },
+
+        'f32-rds-weak-scaling-timing-gpu': {
+            'exe': ['LHC_main.py'],
+            'particles': [1500000],
+            'bunches': [12, 24, 48, 96, 192],
+            'slices': [1000],
+            'turns': [10000],
+            'monitor': [0],
+            'seed': [0],
+            'mtw': [0],
+            'precision': ['single'],
+            'withtp': [0],
+            'reduce': [1],
+            'approx': [2],
+            'log': [1],
+            'loadbalance': ['reportonly,,,,'],
+            'artificialdelay': ['off'],
+            'timing': ['timing'],
+            'gpu': [1],
+            'workers': [1, 2, 4, 8, 16],
+            'omp': [20],
+
+            'mpi': ['openmpi4'],
+            'time': [60],
+            'repeats': 3
+        },
+
+        'srp-weak-scaling-timing-gpu': {
+            'exe': ['LHC_main.py'],
+            'particles': [1500000],
+            'bunches': [12, 24, 48, 96, 192],
+            'slices': [1000],
+            'turns': [10000],
+            'monitor': [0],
+            'seed': [0],
+            'mtw': [0],
+            'precision': ['double'],
+            'withtp': [0],
+            'reduce': [2, 2, 2, 2, 2, 3, 3, 3, 3, 3],
+            'approx': [1],
+            'log': [1],
+            'loadbalance': ['reportonly,,,,'],
+            'artificialdelay': ['off'],
+            'timing': ['timing'],
+            'gpu': [1],
+            'workers': [1, 2, 4, 8, 16],
+            'omp': [20],
+            'mpi': ['openmpi4'],
+            'time': [60],
+            'repeats': 3
+        },
+
+        'rds-weak-scaling-timing-gpu': {
+            'exe': ['LHC_main.py'],
+            'particles': [1500000],
+            'bunches': [12, 24, 48, 96, 192],
+            'slices': [1000],
+            'turns': [10000],
+            'monitor': [0],
+            'seed': [0],
+            'mtw': [0],
+            'precision': ['double'],
+            'withtp': [0],
+            'reduce': [1],
+            'approx': [2],
+            'log': [1],
+            'loadbalance': ['reportonly,,,,'],
+            'artificialdelay': ['off'],
+            'timing': ['timing'],
+            'gpu': [1],
+            'workers': [1, 2, 4, 8, 16],
+            'omp': [20],
+            'mpi': ['openmpi4'],
+            'time': [60],
+            'repeats': 3
+        },
+
+        'exact-weak-scaling-timing-gpu': {
+            'exe': ['LHC_main.py'],
+            'particles': [1500000],
+            'bunches': [12, 24, 48, 96, 192],
+            'slices': [1000],
+            'turns': [10000],
+            'monitor': [0],
+            'seed': [0],
+            'mtw': [0],
+            'precision': ['double'],
+            'withtp': [0],
+            'reduce': [1],
+            'approx': [0],
+            'log': [1],
+            'loadbalance': ['reportonly,,,,'],
+            'artificialdelay': ['off'],
+            'timing': ['timing'],
+            'gpu': [1],
+            'workers': [1, 2, 4, 8, 16],
+            'omp': [20],
+            'mpi': ['openmpi4'],
+            'time': [60],
+            'repeats': 3
+        },
+
+        'float32-weak-scaling-timing-gpu': {
+            'exe': ['LHC_main.py'],
+            'particles': [1500000],
+            'bunches': [12, 24, 48, 96, 192],
+            'slices': [1000],
+            'turns': [10000],
+            'monitor': [0],
+            'seed': [0],
+            'mtw': [0],
+            'precision': ['single'],
+            'withtp': [0],
+            'reduce': [1],
+            'approx': [0],
+            'log': [1],
+            'loadbalance': ['reportonly,,,,'],
+            'artificialdelay': ['off'],
+            'timing': ['timing'],
+            'gpu': [1],
+            'workers': [1, 2, 4, 8, 16],
+            'omp': [20],
+            'mpi': ['openmpi4'],
+            'time': [60],
+            'repeats': 3
+        },
+
+
+        # Approximate Weak-Scaling
+        'f32-srp-timing-cpu': {
+            'exe': ['LHC_main.py'],
+            'particles': [1500000],
+            'bunches': [12, 24, 48, 96, 192],
+            'slices': [1000],
+            'turns': [10000],
+            'monitor': [0],
+            'seed': [0],
+            'mtw': [0],
+            'precision': ['single'],
+            'withtp': [0],
+            'reduce': [2, 2, 2, 2, 2, 3, 3, 3, 3, 3],
+            'approx': [1],
+            'log': [1],
+            'loadbalance': ['reportonly,,,,'],
+            'artificialdelay': ['off'],
+            'timing': ['timing'],
+            'gpu': [0],
+            'workers': [2, 4, 8, 16, 32],
+            'omp': [10],            
+            'mpi': ['openmpi4'],
+            'time': [60],
+            'repeats': 2
+        },
+
+        'f32-rds-timing-cpu': {
+            'exe': ['LHC_main.py'],
+            'particles': [1500000],
+            'bunches': [12, 24, 48, 96, 192],
+            'slices': [1000],
+            'turns': [10000],
+            'monitor': [0],
+            'seed': [0],
+            'mtw': [0],
+            'precision': ['single'],
+            'withtp': [0],
+            'reduce': [1],
+            'approx': [2],
+            'log': [1],
+            'loadbalance': ['reportonly,,,,'],
+            'artificialdelay': ['off'],
+            'timing': ['timing'],
+            'gpu': [0],
+            'workers': [2, 4, 8, 16, 32],
+            'omp': [10],
+
+            'mpi': ['openmpi4'],
+            'time': [60],
+            'repeats': 3
+        },
+
+        'srp-timing-cpu': {
+            'exe': ['LHC_main.py'],
+            'particles': [1500000],
+            'bunches': [12, 24, 48, 96, 192],
+            'slices': [1000],
+            'turns': [10000],
+            'monitor': [0],
+            'seed': [0],
+            'mtw': [0],
+            'precision': ['double'],
+            'withtp': [0],
+            'reduce': [2, 2, 2, 2, 2, 3, 3, 3, 3, 3],
+            'approx': [1],
+            'log': [1],
+            'loadbalance': ['reportonly,,,,'],
+            'artificialdelay': ['off'],
+            'timing': ['timing'],
+            'gpu': [0],
+            'workers': [2, 4, 8, 16, 32],
+            'omp': [10],
+
+            'mpi': ['openmpi4'],
+            'time': [60],
+            'repeats': 2
+        },
+
+        'rds-timing-cpu': {
+            'exe': ['LHC_main.py'],
+            'particles': [1500000],
+            'bunches': [192],
+            'slices': [1000],
+            'turns': [10000],
+            'monitor': [0],
+            'seed': [0],
+            'mtw': [0],
+            'precision': ['double'],
+            'withtp': [0],
+            'reduce': [1],
+            'approx': [2],
+            'log': [1],
+            'loadbalance': ['reportonly,,,,'],
+            'artificialdelay': ['off'],
+            'timing': ['timing'],
+            'gpu': [0],
+            'workers': [32],
+            'omp': [10],
+            'mpi': ['openmpi4'],
+            'time': [60],
+            'repeats': 2
+        },
+
+        'exact-timing-cpu': {
+            'exe': ['LHC_main.py'],
+            'particles': [1500000],
+            'bunches': [192],
+            'slices': [1000],
+            'turns': [10000],
+            'monitor': [0],
+            'seed': [0],
+            'mtw': [0],
+            'precision': ['double'],
+            'withtp': [0],
+            'reduce': [1],
+            'approx': [0],
+            'log': [1],
+            'loadbalance': ['reportonly,,,,'],
+            'artificialdelay': ['off'],
+            'timing': ['timing'],
+            'gpu': [0],
+            'workers': [32],
+            'omp': [10],
+            'mpi': ['openmpi4'],
+            'time': [60],
+            'repeats': 2
+        },
+
+        'float32-timing-cpu': {
+            'exe': ['LHC_main.py'],
+            'particles': [1500000],
+            'bunches': [12, 24, 48, 96, 192],
+            'slices': [1000],
+            'turns': [10000],
+            'monitor': [0],
+            'seed': [0],
+            'mtw': [0],
+            'precision': ['single'],
+            'withtp': [0],
+            'reduce': [1],
+            'approx': [0],
+            'log': [1],
+            'loadbalance': ['reportonly,,,,'],
+            'artificialdelay': ['off'],
+            'timing': ['timing'],
+            'gpu': [0],
+            'workers': [2, 4, 8, 16, 32],
+            'omp': [10],
+            'mpi': ['openmpi4'],
+            'time': [60],
+            'repeats': 3
+        },
 
         # Monitors
         'f32-srp-monitor': {
@@ -450,7 +771,7 @@ slurm:
 
         'tp-approx0-weak-scaling': {
             'exe': ['LHC_main.py'],
-            'particles': [3000000], #, 2000000],
+            'particles': [1500000], #, 2000000],
             'bunches': [12, 24, 48, 96, 192], #96],  # 96
             'slices': [1000],
             'turns': [10000],
@@ -476,7 +797,7 @@ slurm:
 
         'approx0-weak-scaling': {
             'exe': ['LHC_main.py'],
-            'particles': [3000000], #, 2000000],
+            'particles': [1500000], #, 2000000],
             'bunches': [12, 24, 48, 96, 192], #96],  # 96
 
             'slices': [1000],
@@ -501,11 +822,38 @@ slurm:
             'time': [60],
             'repeats': 2
         },
+        'cpu-baseline': {
+            'exe': ['LHC_main.py'],
+            'particles': [1500000], #, 2000000],
+            'bunches': [12, 192], #96],  # 96
+
+            'slices': [1000],
+            'turns': [10000],
+            'monitor': [0],
+            'seed': [0],
+            'mtw': [0],
+            'withtp': [0],
+            'reduce': [1],
+            'approx': [0],
+            'log': [1],
+            'loadbalance': ['reportonly,,,,'],
+            'gpu': [0],
+            'artificialdelay': ['off'],
+            'precision': ['double'],
+            'timing': ['timing'],
+
+            'workers': [1],
+
+            'omp': [20],
+            'mpi': ['openmpi4'],
+            'time': [220],
+            'repeats': 2
+        },
 
 
         'tp-approx0-strong-scaling': {
             'exe': ['LHC_main.py'],
-            'particles': [3000000], #, 2000000],
+            'particles': [1500000], #, 2000000],
             'bunches': [192], #96],  # 96
             'slices': [1000],
             'turns': [10000],
@@ -531,9 +879,8 @@ slurm:
 
         'approx0-strong-scaling': {
             'exe': ['LHC_main.py'],
-            'particles': [3000000], #, 2000000],
+            'particles': [1500000], #, 2000000],
             'bunches': [192], #96],  # 96
-
             'slices': [1000],
             'turns': [10000],
             'monitor': [0],
@@ -561,7 +908,7 @@ slurm:
         # Weak scaling
         'approx0-weak-scaling-gpu-1pn': {
             'exe': ['LHC_main.py'],
-            'particles': [3000000],
+            'particles': [1500000],
             'bunches': [12, 24, 48, 96, 192],
 
             'slices': [1000],
@@ -578,20 +925,17 @@ slurm:
             'artificialdelay': ['off'],
             'precision': ['double'],
             'timing': ['timing'],
-
             'workers': [1, 2, 4, 8, 16],
-
             'omp': [20],
             'mpi': ['openmpi4'],
             'time': [60],
-            'repeats': 2
+            'repeats': 3
         },
 
         'approx0-weak-scaling-gpu-2pn': {
             'exe': ['LHC_main.py'],
-            'particles': [6000000],
+            'particles': [1500000],
             'bunches': [12, 24, 48, 96, 192],
-
             'slices': [1000],
             'turns': [10000],
             'monitor': [0],
@@ -605,14 +949,12 @@ slurm:
             'artificialdelay': ['off'],
             'precision': ['double'],
             'timing': ['timing'],
-
             'gpu': [2],
             'workers': [2, 4, 8, 16, 32],
-
             'omp': [10],
             'mpi': ['openmpi4'],
             'time': [60],
-            'repeats': 2
+            'repeats': 3
         },
 
 
@@ -620,7 +962,7 @@ slurm:
         # Strong scaling GPU only
         'approx0-strong-scaling-gpu-1pn': {
             'exe': ['LHC_main.py'],
-            'particles': [3000000],
+            'particles': [1500000],
             'bunches': [192],
 
             'slices': [1000],
@@ -637,20 +979,17 @@ slurm:
             'artificialdelay': ['off'],
             'precision': ['double'],
             'timing': ['timing'],
-
             'workers': [1, 2, 4, 8, 16],
-
             'omp': [20],
             'mpi': ['openmpi4'],
             'time': [90],
-            'repeats': 2
+            'repeats': 3
         },
 
         'approx0-strong-scaling-gpu-2pn': {
             'exe': ['LHC_main.py'],
-            'particles': [6000000],
+            'particles': [1500000],
             'bunches': [192],
-
             'slices': [1000],
             'turns': [10000],
             'monitor': [0],
@@ -664,14 +1003,12 @@ slurm:
             'artificialdelay': ['off'],
             'precision': ['double'],
             'timing': ['timing'],
-
             'gpu': [2],
             'workers': [2, 4, 8, 16, 32],
-
             'omp': [10],
             'mpi': ['openmpi4'],
             'time': [90],
-            'repeats': 2
+            'repeats': 3
         },        
 
         # CPU-GPU experiments
@@ -802,98 +1139,180 @@ slurm:
 
 
 condor:
-    run_configs:
-        - 'precision-monitor'
-        - 'precision-seed'
+    run_configs: 
+        #- 'precision-monitor'
+        # - 'precision-seed'
         # - 'precision-timing'
 
+        # Approximate Weak Scaling GPU
+        - 'srp-timing-gpu' 
+        - 'rds-timing-gpu' 
+        - 'exact-timing-gpu'  
+        - 'float32-timing-gpu'
+        - 'f32-srp-timing-gpu'
+        - 'f32-rds-timing-gpu' 
+    
 
     configs: {
-        'precision-monitor': {
+        # Approximate Weak-Scaling
+        'f32-srp-timing-gpu': {
             'exe': ['LHC_main.py'],
-            'particles': [1000000],
-            'bunches': [1],  # 192
+            'particles': [1500000],
+            'bunches': [12],
             'slices': [1000],
-            'turns': [40000],
-            'monitor': [100],
+            'turns': [10000],
+            'monitor': [0],
             'seed': [0],
             'mtw': [0],
-            'precision': ['single', 'double'],
+            'precision': ['single'],
             'withtp': [0],
-            'reduce': [1],
-            'approx': [0],
+            'reduce': [2, 3],
+            'approx': [1],
             'log': [1],
-            'loadbalance': ['reportonly'],
-            'loadbalancearg': [500],
+            'loadbalance': ['reportonly,,,,'],
+            'artificialdelay': ['off'],
             'timing': ['timing'],
+            'gpu': [1],
             'workers': [1],
-            'omp': [2],
-            'mpi': ['mpich3'],
-            'time': [1800],
-            'repeats': 1
+            'omp': [20],            
+            'mpi': ['openmpi4'],
+            'time': [60],
+            'repeats': 3
         },
 
-        'precision-seed': {
+        'f32-rds-timing-gpu': {
             'exe': ['LHC_main.py'],
-            'particles': [1000000],
-            'bunches': [1],  # 192
+            'particles': [1500000],
+            'bunches': [12],
             'slices': [1000],
-            'turns': [40000],
-            'monitor': [100],
-            'seed': [1, 2],
+            'turns': [10000],
+            'monitor': [0],
+            'seed': [0],
+            'mtw': [0],
+            'precision': ['single'],
+            'withtp': [0],
+            'reduce': [1],
+            'approx': [2],
+            'log': [1],
+            'loadbalance': ['reportonly,,,,'],
+            'artificialdelay': ['off'],
+            'timing': ['timing'],
+            'gpu': [1],
+            'workers': [1],
+            'omp': [20],
+
+            'mpi': ['openmpi4'],
+            'time': [60],
+            'repeats': 3
+        },
+
+        'srp-timing-gpu': {
+            'exe': ['LHC_main.py'],
+            'particles': [1500000],
+            'bunches': [12],
+            'slices': [1000],
+            'turns': [10000],
+            'monitor': [0],
+            'seed': [0],
+            'mtw': [0],
+            'precision': ['double'],
+            'withtp': [0],
+            'reduce': [2, 3],
+            'approx': [1],
+            'log': [1],
+            'loadbalance': ['reportonly,,,,'],
+            'artificialdelay': ['off'],
+            'timing': ['timing'],
+            'gpu': [1],
+            'workers': [1],
+            'omp': [20],
+            'mpi': ['openmpi4'],
+            'time': [60],
+            'repeats': 3
+        },
+
+        'rds-timing-gpu': {
+            'exe': ['LHC_main.py'],
+            'particles': [1500000],
+            'bunches': [12],
+            'slices': [1000],
+            'turns': [10000],
+            'monitor': [0],
+            'seed': [0],
+            'mtw': [0],
+            'precision': ['double'],
+            'withtp': [0],
+            'reduce': [1],
+            'approx': [2],
+            'log': [1],
+            'loadbalance': ['reportonly,,,,'],
+            'artificialdelay': ['off'],
+            'timing': ['timing'],
+            'gpu': [1],
+            'workers': [1],
+            'omp': [20],
+            'mpi': ['openmpi4'],
+            'time': [60],
+            'repeats': 3
+        },
+
+        'exact-timing-gpu': {
+            'exe': ['LHC_main.py'],
+            'particles': [1500000],
+            'bunches': [12],
+            'slices': [1000],
+            'turns': [10000],
+            'monitor': [0],
+            'seed': [0],
             'mtw': [0],
             'precision': ['double'],
             'withtp': [0],
             'reduce': [1],
             'approx': [0],
             'log': [1],
-            'loadbalance': ['reportonly'],
-            'loadbalancearg': [500],
+            'loadbalance': ['reportonly,,,,'],
+            'artificialdelay': ['off'],
             'timing': ['timing'],
+            'gpu': [1],
             'workers': [1],
-            'omp': [2],
-            'mpi': ['mpich3'],
-            'time': [1800],
-            'repeats': 1
+            'omp': [20],
+            'mpi': ['openmpi4'],
+            'time': [60],
+            'repeats': 3
         },
 
-
-
-        'precision-timing': {
+        'float32-timing-gpu': {
             'exe': ['LHC_main.py'],
-            'particles': [1000000],
-            'bunches': [4],  # 192
+            'particles': [1500000],
+            'bunches': [12],
             'slices': [1000],
             'turns': [10000],
             'monitor': [0],
             'seed': [0],
             'mtw': [0],
-            'precision': ['single', 'double'],
+            'precision': ['single'],
             'withtp': [0],
             'reduce': [1],
             'approx': [0],
             'log': [1],
-            'loadbalance': ['reportonly'],
-            'loadbalancearg': [500],
+            'loadbalance': ['reportonly,,,,'],
+            'artificialdelay': ['off'],
             'timing': ['timing'],
+            'gpu': [1],
             'workers': [1],
-            'omp': [
-                1, 1, 
-                # 2, 2, 4, 4
-            ],
-            'mpi': ['mpich3'],
-            'time': [1800],
-            'repeats': 2
-        }
+            'omp': [20],
+            'mpi': ['openmpi4'],
+            'time': [60],
+            'repeats': 3
+        },
     }
-
 
 
 local: 
     run_configs: 
 
-        - 'precision-monitor'
-        - 'precision-seed'
+        # - 'precision-monitor'
+        # - 'precision-seed'
         # - 'precision-timing'
 
 
@@ -917,9 +1336,169 @@ local:
         # - 'lb-tp-approx0-weak-scaling'
         # - 'lb-tp-approx1-weak-scaling'
         # - 'lb-tp-approx2-weak-scaling'
-
+        
+        # Approximate Weak Scaling GPU
+        - 'srp-timing-gpu' 
+        - 'rds-timing-gpu' 
+        - 'exact-timing-gpu'  
+        - 'float32-timing-gpu'
+        - 'f32-srp-timing-gpu'
+        - 'f32-rds-timing-gpu' 
 
     configs: {
+
+        # Approximate Weak-Scaling
+        'f32-srp-timing-gpu': {
+            'exe': ['LHC_main.py'],
+            'particles': [1500000],
+            'bunches': [12],
+            'slices': [1000],
+            'turns': [10000],
+            'monitor': [0],
+            'seed': [0],
+            'mtw': [0],
+            'precision': ['single'],
+            'withtp': [0],
+            'reduce': [2, 3],
+            'approx': [1],
+            'log': [1],
+            'loadbalance': ['reportonly,,,,'],
+            'artificialdelay': ['off'],
+            'timing': ['timing'],
+            'gpu': [1],
+            'workers': [1],
+            'omp': [20],            
+            'mpi': ['openmpi4'],
+            'time': [60],
+            'repeats': 2
+        },
+
+        'f32-rds-timing-gpu': {
+            'exe': ['LHC_main.py'],
+            'particles': [1500000],
+            'bunches': [12],
+            'slices': [1000],
+            'turns': [10000],
+            'monitor': [0],
+            'seed': [0],
+            'mtw': [0],
+            'precision': ['single'],
+            'withtp': [0],
+            'reduce': [1],
+            'approx': [2],
+            'log': [1],
+            'loadbalance': ['reportonly,,,,'],
+            'artificialdelay': ['off'],
+            'timing': ['timing'],
+            'gpu': [1],
+            'workers': [1],
+            'omp': [20],
+
+            'mpi': ['openmpi4'],
+            'time': [60],
+            'repeats': 2
+        },
+
+        'srp-timing-gpu': {
+            'exe': ['LHC_main.py'],
+            'particles': [1500000],
+            'bunches': [12],
+            'slices': [1000],
+            'turns': [10000],
+            'monitor': [0],
+            'seed': [0],
+            'mtw': [0],
+            'precision': ['double'],
+            'withtp': [0],
+            'reduce': [2, 3],
+            'approx': [1],
+            'log': [1],
+            'loadbalance': ['reportonly,,,,'],
+            'artificialdelay': ['off'],
+            'timing': ['timing'],
+            'gpu': [1],
+            'workers': [1],
+            'omp': [20],
+            'mpi': ['openmpi4'],
+            'time': [60],
+            'repeats': 2
+        },
+
+        'rds-timing-gpu': {
+            'exe': ['LHC_main.py'],
+            'particles': [1500000],
+            'bunches': [12],
+            'slices': [1000],
+            'turns': [10000],
+            'monitor': [0],
+            'seed': [0],
+            'mtw': [0],
+            'precision': ['double'],
+            'withtp': [0],
+            'reduce': [1],
+            'approx': [2],
+            'log': [1],
+            'loadbalance': ['reportonly,,,,'],
+            'artificialdelay': ['off'],
+            'timing': ['timing'],
+            'gpu': [1],
+            'workers': [1],
+            'omp': [20],
+            'mpi': ['openmpi4'],
+            'time': [60],
+            'repeats': 2
+        },
+
+        'exact-timing-gpu': {
+            'exe': ['LHC_main.py'],
+            'particles': [1500000],
+            'bunches': [12],
+            'slices': [1000],
+            'turns': [10000],
+            'monitor': [0],
+            'seed': [0],
+            'mtw': [0],
+            'precision': ['double'],
+            'withtp': [0],
+            'reduce': [1],
+            'approx': [0],
+            'log': [1],
+            'loadbalance': ['reportonly,,,,'],
+            'artificialdelay': ['off'],
+            'timing': ['timing'],
+            'gpu': [1],
+            'workers': [1],
+            'omp': [20],
+            'mpi': ['openmpi4'],
+            'time': [60],
+            'repeats': 2
+        },
+
+        'float32-timing-gpu': {
+            'exe': ['LHC_main.py'],
+            'particles': [1500000],
+            'bunches': [12],
+            'slices': [1000],
+            'turns': [10000],
+            'monitor': [0],
+            'seed': [0],
+            'mtw': [0],
+            'precision': ['single'],
+            'withtp': [0],
+            'reduce': [1],
+            'approx': [0],
+            'log': [1],
+            'loadbalance': ['reportonly,,,,'],
+            'artificialdelay': ['off'],
+            'timing': ['timing'],
+            'gpu': [1],
+            'workers': [1],
+            'omp': [20],
+            'mpi': ['openmpi4'],
+            'time': [60],
+            'repeats': 2
+        },
+
         'precision-monitor': {
             'exe': ['LHC_main.py'],
             'particles': [1000000],
