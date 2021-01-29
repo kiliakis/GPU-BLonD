@@ -5,14 +5,14 @@ slurm:
         
         # CPU only experiments
         # Strong scaling
-        - 'approx0-strong-scaling'
-        - 'tp-approx0-strong-scaling'
+        # - 'approx0-strong-scaling'
+        # - 'tp-approx0-strong-scaling'
         # - 'lb-tp-approx0-strong-scaling'
         
         # Weak Scaling
         # - 'lb-tp-approx0-weak-scaling'
-        - 'approx0-weak-scaling'
-        - 'tp-approx0-weak-scaling'
+        # - 'approx0-weak-scaling'
+        # - 'tp-approx0-weak-scaling'
         # - 'lb-tp-approx0-weak-scaling'
 
         # - 'lb-tp-approx1-weak-scaling'
@@ -27,6 +27,15 @@ slurm:
         # - 'lb-tp-approx1-interm'
         # - 'lb-tp-approx2-interm'
 
+        # approximations
+        # - 'srp-timing-cpu'
+        # - 'rds-timing-cpu'
+        # - 'exact-timing-cpu'
+        - 'float32-timing-cpu'
+        # - 'f32-srp-timing-cpu'
+        # - 'f32-rds-timing-cpu'
+
+
         # Optimal num of workers per node
         # - 'approx0-workers'
         
@@ -36,12 +45,12 @@ slurm:
         # 'approx0-openmpi3-impl'
 
         # GPU only experiments
-        - 'approx0-weak-scaling-gpu-1pn'
-        - 'approx0-weak-scaling-gpu-2pn'
+        # - 'approx0-weak-scaling-gpu-1pn'
+        # - 'approx0-weak-scaling-gpu-2pn'
         # - 'tp-approx0-weak-scaling-gpu'
 
-        - 'approx0-strong-scaling-gpu-1pn'
-        - 'approx0-strong-scaling-gpu-2pn'
+        # - 'approx0-strong-scaling-gpu-1pn'
+        # - 'approx0-strong-scaling-gpu-2pn'
         # - 'tp-approx0-strong-scaling-gpu'
 
         # - 'lb-tp-approx0-weak-scaling-gpu'
@@ -54,12 +63,12 @@ slurm:
         # - 'lb-approx0-weak-scaling-cpu-gpu'
         
         # Approximate 
-        - 'srp-timing-gpu'
-        - 'rds-timing-gpu'
-        - 'exact-timing-gpu'
-        - 'float32-timing-gpu'
-        - 'f32-srp-timing-gpu'
-        - 'f32-rds-timing-gpu'
+        # - 'srp-timing-gpu'
+        # - 'rds-timing-gpu'
+        # - 'exact-timing-gpu'
+        # - 'float32-timing-gpu'
+        # - 'f32-srp-timing-gpu'
+        # - 'f32-rds-timing-gpu'
 
         # - f32-rds-monitor
         # - f32-srp-monitor
@@ -236,6 +245,31 @@ slurm:
             'repeats': 2
         },
 
+        'float32-timing-cpu': {
+            'exe': ['SPS_main.py'],
+            'particles': [1000000],
+            'bunches': [18, 36, 72, 144, 288],  # 192
+
+            'slices': [1408],
+            'turns': [10000],
+            'monitor': [0],
+            'seed': [0],
+            'mtw': [0],
+            'precision': ['single'],
+            'withtp': [0],
+            'reduce': [1],
+            'approx': [0],
+            'log': [1],
+            'loadbalance': ['reportonly,,,,'],
+            'artificialdelay': ['off'],
+            'timing': ['timing'],
+            'gpu': [0],
+            'workers': [2, 4, 8, 16, 32],
+            'omp': [20],
+            'mpi': ['openmpi4'],
+            'time': [80],
+            'repeats': 1
+        },
 
         # Monitors
         'f32-srp-monitor': {

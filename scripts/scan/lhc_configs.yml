@@ -29,7 +29,14 @@ slurm:
 
         # Optimal num of workers per node
         # - 'approx0-workers'
-        
+        # approximations
+        # - 'srp-timing-cpu' # Done 
+        # - 'rds-timing-cpu' # In progress
+        # - 'exact-timing-cpu' # In progress
+        - 'float32-timing-cpu'
+        # - 'f32-srp-timing-cpu' 
+        # - 'f32-rds-timing-cpu' 
+
         # Various MPI implementations
         # 'approx0-impl'
         # 'approx0-mvapich2-impl'
@@ -276,6 +283,7 @@ slurm:
             'time': [60],
             'repeats': 2
         },
+
 
         # Approximate Weak-Scaling
         'f32-srp-weak-scaling-timing-gpu': {
@@ -579,8 +587,8 @@ slurm:
             'workers': [2, 4, 8, 16, 32],
             'omp': [10],
             'mpi': ['openmpi4'],
-            'time': [60],
-            'repeats': 3
+            'time': [80],
+            'repeats': 1
         },
 
         # Monitors
