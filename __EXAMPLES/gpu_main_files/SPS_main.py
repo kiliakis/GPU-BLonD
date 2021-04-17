@@ -31,7 +31,7 @@ from blond.impedances.impedance_sources import TravelingWaveCavity
 from blond.trackers.tracker import RingAndRFTracker, FullRingAndRF
 from blond.llrf.beam_feedback import BeamFeedback
 from blond.utils.input_parser import parse
-from blond.monitors.monitors import SlicesMonitor
+from blond.monitors.monitors import MultiBunchMonitor
 from blond.utils.mpi_config import worker, mpiprint
 from blond.utils import bmath as bm
 
@@ -473,12 +473,12 @@ if args['monitor'] > 0 and worker.isMaster:
         filename = 'monitorfiles/sps-t{}-p{}-b{}-sl{}-approx{}-prec{}-r{}-m{}-se{}-w{}'.format(
             n_iterations, n_particles, n_bunches, n_slices, approx, args['precision'],
             n_turns_reduce, args['monitor'], seed, worker.workers)
-    slicesMonitor = SlicesMonitor(filename=filename,
-                                  n_turns=np.ceil(
-                                      n_iterations / args['monitor']),
-                                  profile=profile,
-                                  rf=rf_station,
-                                  Nbunches=n_bunches)
+    slicesMonitor = MultiBunchMonitor(filename=filename,
+                                      n_turns=np.ceil(
+                                          n_iterations / args['monitor']),
+                                      profile=profile,
+                                      rf=rf_station,
+                                      Nbunches=n_bunches)
 
 
 if args['gpu'] > 0:
@@ -530,11 +530,12 @@ for turn in range(n_iterations):
             elif (approx == 1) and (turn % n_turns_reduce == 0):
                 inducedVoltage.induced_voltage_sum()
             tracker.pre_track()
-        
+
         worker.gpuSync()
-        
+
         # Here I need to broadcast the calculated stuff
-        inducedVoltage.induced_voltage = worker.broadcast(inducedVoltage.induced_voltage)
+        inducedVoltage.induced_voltage = worker.broadcast(
+            inducedVoltage.induced_voltage)
         tracker.rf_voltage = worker.broadcast(tracker.rf_voltage)
     # else just do the normal task-parallelism
     elif withtp:
@@ -589,7 +590,7 @@ for turn in range(n_iterations):
         beam.gather_statistics()
         profile.fwhm_multibunch(n_bunches, bunch_spacing,
                                 rf_station.t_rf[0, turn], bucket_tolerance=0)
-                                # shiftX=rf_station.phi_rf[0, turn]/rf_station.omega_rf[0, turn])
+        # shiftX=rf_station.phi_rf[0, turn]/rf_station.omega_rf[0, turn])
 
         if worker.isMaster:
             # profile.fwhm()

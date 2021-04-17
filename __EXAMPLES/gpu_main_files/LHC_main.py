@@ -15,7 +15,7 @@ except ImportError:
     from blond.utils import profile_mock as timing
     mpiprof = timing
 
-from blond.monitors.monitors import SlicesMonitor
+from blond.monitors.monitors import MultiBunchMonitor
 from blond.toolbox.next_regular import next_regular
 from blond.impedances.impedance import InducedVoltageFreq, TotalInducedVoltage
 from blond.impedances.impedance_sources import InputTable
@@ -237,7 +237,7 @@ if args['monitor'] > 0 and worker.isMaster:
         filename = 'monitorfiles/lhc-t{}-p{}-b{}-sl{}-approx{}-prec{}-r{}-m{}-se{}-w{}'.format(
             n_iterations, n_particles, n_bunches, n_slices, approx, args['precision'],
             n_turns_reduce, args['monitor'], seed, worker.workers)
-    slicesMonitor = SlicesMonitor(filename=filename,
+    slicesMonitor = MultiBunchMonitor(filename=filename,
                                   n_turns=np.ceil(
                                       n_iterations / args['monitor']),
                                   profile=profile,
@@ -352,6 +352,7 @@ mpiprint('dt std: ', np.std(beam.dt))
 # mpiprint('shift ', rf.phi_rf[0, turn]/rf.omega_rf[0, turn])
 
 mpiprint('profile mean: ', np.mean(profile.n_macroparticles))
+mpiprint('profile sum: ', np.sum(profile.n_macroparticles))
 mpiprint('profile std: ', np.std(profile.n_macroparticles))
 
 mpiprint('Done!')
