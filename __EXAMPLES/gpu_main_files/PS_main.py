@@ -42,7 +42,6 @@ this_directory = os.path.dirname(os.path.realpath(__file__)) + '/'
 inputDir = os.path.join(this_directory, '../input_files/PS/')
 
 
-
 # Simulation parameters -------------------------------------------------------
 
 # Output parameters
@@ -110,7 +109,7 @@ n_turns_memory = 100
 n_turns_reduce = 1
 n_turns = 378708
 n_iterations = n_turns
-seed = 0 
+seed = 0
 args = parse()
 
 
@@ -423,11 +422,11 @@ if args['monitor'] > 0 and worker.isMaster:
             n_iterations, n_particles, n_bunches, n_slices, approx, args['precision'],
             n_turns_reduce, args['monitor'], seed, worker.workers)
     slicesMonitor = MultiBunchMonitor(filename=filename,
-                                  n_turns=np.ceil(
-                                      n_iterations / args['monitor']),
-                                  profile=profile,
-                                  rf=rf_params,
-                                  Nbunches=n_bunches)
+                                      n_turns=np.ceil(
+                                          n_iterations / args['monitor']),
+                                      profile=profile,
+                                      rf=rf_params,
+                                      Nbunches=n_bunches)
 
 
 if worker.hasGPU:
@@ -480,11 +479,12 @@ for turn in range(n_iterations):
             tracker.pre_track()
         # else:
         #     pass
-        
+
         worker.gpuSync()
-        
+
         # Here I need to broadcast the calculated stuff
-        PS_longitudinal_intensity.induced_voltage = worker.broadcast(PS_longitudinal_intensity.induced_voltage)
+        PS_longitudinal_intensity.induced_voltage = worker.broadcast(
+            PS_longitudinal_intensity.induced_voltage)
         tracker.rf_voltage = worker.broadcast(tracker.rf_voltage)
     # else just do the normal task-parallelism
     elif withtp:
@@ -497,7 +497,8 @@ for turn in range(n_iterations):
             tracker.pre_track()
 
         worker.intraSync()
-        worker.sendrecv(PS_longitudinal_intensity.induced_voltage, tracker.rf_voltage)
+        worker.sendrecv(
+            PS_longitudinal_intensity.induced_voltage, tracker.rf_voltage)
     else:
         if (approx == 0) or (approx == 2):
             PS_longitudinal_intensity.induced_voltage_sum()
@@ -505,7 +506,7 @@ for turn in range(n_iterations):
             PS_longitudinal_intensity.induced_voltage_sum()
         # PS_longitudinal_intensity.induced_voltage_sum()
         tracker.pre_track()
-        
+
     tracker.track_only()
 
     if (args['monitor'] > 0) and (turn % args['monitor'] == 0):
@@ -513,12 +514,12 @@ for turn in range(n_iterations):
         beam.gather_statistics()
         profile.fwhm_multibunch(n_bunches, bunch_spacing_buckets,
                                 rf_params.t_rf[0, turn], bucket_tolerance=0)
-                                # shiftX=rf_params.phi_rf[0, turn]/rf_params.omega_rf[0, turn])
+        # shiftX=rf_params.phi_rf[0, turn]/rf_params.omega_rf[0, turn])
 
         if worker.isMaster:
             # profile.fwhm()
             slicesMonitor.track(turn)
-    
+
     worker.DLB(turn, beam)
 
 beam.gather()

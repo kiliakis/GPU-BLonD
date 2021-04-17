@@ -587,7 +587,8 @@ class Profile(object):
             self.n_macroparticles, self.bin_centers, shift)
 
     def fwhm_multibunch(self, n_bunches, bunch_spacing_buckets,
-                        bucket_size_tau, bucket_tolerance=0.40, shift=0):
+                        bucket_size_tau, bucket_tolerance=0.40, 
+                        shift=0, shiftX=0):
         """
         Computation of the bunch length and position from the FWHM
         assuming Gaussian line density for multibunch case.
@@ -595,7 +596,8 @@ class Profile(object):
 
         self.bunchPosition, self.bunchLength = ffroutines.fwhm_multibunch(
             self.n_macroparticles, self.bin_centers, n_bunches,
-            bunch_spacing_buckets, bucket_size_tau, bucket_tolerance, shift)
+            bunch_spacing_buckets, bucket_size_tau, bucket_tolerance,
+            shift=shift, shiftX=shiftX)
 
     def beam_spectrum_freq_generation(self, n_sampling_fft):
         """

@@ -238,11 +238,11 @@ if args['monitor'] > 0 and worker.isMaster:
             n_iterations, n_particles, n_bunches, n_slices, approx, args['precision'],
             n_turns_reduce, args['monitor'], seed, worker.workers)
     slicesMonitor = MultiBunchMonitor(filename=filename,
-                                  n_turns=np.ceil(
-                                      n_iterations / args['monitor']),
-                                  profile=profile,
-                                  rf=rf,
-                                  Nbunches=n_bunches)
+                                      n_turns=np.ceil(
+                                          n_iterations / args['monitor']),
+                                      profile=profile,
+                                      rf=rf,
+                                      Nbunches=n_bunches)
 
 # bm.GPU(args['gpu'])
 if worker.hasGPU:
@@ -261,7 +261,6 @@ worker.initDLB(args['loadbalance'], n_iterations)
 worker.sync()
 timing.reset()
 start_t = time.time()
-
 
 
 for turn in range(n_iterations):
@@ -295,7 +294,8 @@ for turn in range(n_iterations):
         worker.gpuSync()
 
         # Here I need to broadcast the calculated stuff
-        totVoltage.induced_voltage = worker.broadcast(totVoltage.induced_voltage)
+        totVoltage.induced_voltage = worker.broadcast(
+            totVoltage.induced_voltage)
         tracker.rf_voltage = worker.broadcast(tracker.rf_voltage, root=1)
     # else just do the normal task-parallelism
     elif withtp:
@@ -315,7 +315,7 @@ for turn in range(n_iterations):
         elif (approx == 1) and (turn % n_turns_reduce == 0):
             totVoltage.induced_voltage_sum()
         tracker.pre_track()
-        
+
     tracker.track_only()
 
     if (args['monitor'] > 0) and (turn % args['monitor'] == 0):
